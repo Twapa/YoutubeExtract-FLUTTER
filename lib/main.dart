@@ -1,42 +1,51 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
+
+import 'package:YoutubeExtract/getplayer.dart';
+import 'package:YoutubeExtract/lib/YoutubrDownloader.dart';
+import 'package:YoutubeExtract/lib/model/YouDetails.dart';
+import 'package:YoutubeExtract/lib/model/YoutubeVideo.dart';
+import 'package:YoutubeExtract/lib/model/formats/AudioVideoFormat.dart';
+import 'package:YoutubeExtract/lib/model/formats/VideoFormat.dart';
+import 'package:YoutubeExtract/lib/model/quality/enums.dart';
 
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html;
-import 'package:youtubeDownloader/lib1/models/videodetails.dart';
-import 'package:youtubeDownloader/lib1/youtubevideo.dart';
 
-main(List<String> args) async {
-  //https://m.youtube.com/watch?v=bESGLojNYSo
-  String videoid = 'bESGLojNYSo';
-  var ht = await getVideo(videoid);
-  var playerResponseJson = json.decode(ht['player_response']);
-  var playAbility = playerResponseJson['playabilityStatus'];
+main() async {
+  //await playe.getVideoPlayerContextAsync('48kmkN-v6-4');
 
-  var details = playerResponseJson['videoDetails'];
-  var streamingData = playerResponseJson['streamingData'];
+  String DESPACITO_ID = "kJQP7kiw5Fk"; // despacito
+   String mtz = "weQB4BL9zBM"; // despacito
 
-  
 
-  
+  YoutubeDownloader downloader = new YoutubeDownloader();
 
-  VideoDetails vi = VideoDetails( details, videoid);
+  YoutubeVideo v = await downloader.getVideo(mtz);
+   //await downloader.getVideo(DESPACITO_ID);
+   print(v.details().author);
 
-  print(vi);
+  // video details
+  //VideoDetails details = v.details();
+  //print(details.averageRating());
 
-  // var varr = videoDetails.keywords;
+  // List<AudioVideoFormat> videoWithAudioFormats =
+  //     await v.videoWithAudioFormats();
+  // videoWithAudioFormats.forEach((it) {
+  //   print('${it.audioQuality()}   : ${it.url}');
+  // });
 
-  //YoutubeVideo youtubeVideo = YoutubeVideo(vi);
+  // List<VideoFormat> videoFormats = v.findVideoWithQuality(VideoQuality.hd720);
+  // videoFormats.forEach((it) {
+  //   print('${it.qualityLabel} ${it.bitrate}');
+  // });
+
+   int itag = 18;
+   var format = v.findFormatByItag(itag);
+    v.download(format);
+ // print(format.url);
+  // Uri u = Uri.parse(format.url);
+  //print(u);
 }
-
-Future<Map<String, String>> getVideo(String videoId) async {
-  var httped = http.Client();
-  var eurl = Uri.encodeFull('https://youtube.googleapis.com/v/$videoId');
-
-  var url = 'https://youtube.com/get_video_info?video_id=$videoId'
-      '&el=embedded&eurl=$eurl&hl=en';
-  var raw = (await httped.get(url)).body;
-  return Uri.splitQueryString(raw);
-}
-

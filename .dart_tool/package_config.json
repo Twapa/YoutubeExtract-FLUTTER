@@ -104,13 +104,13 @@
       "languageVersion": "2.4"
     },
     {
-      "name": "youtubeDownloader",
+      "name": "YoutubeExtract",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-08-26T02:13:17.742825Z",
+  "generated": "2020-08-30T06:12:36.323598Z",
   "generator": "pub",
   "generatorVersion": "2.9.0"
 }
