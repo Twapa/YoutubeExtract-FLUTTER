@@ -6,15 +6,15 @@
 
 abstract class CipherFactory {
 
-
+   
    createCipher(var jsUrl);
 
-   // void addInitialFunctionPattern(int priority, var regex);
+    addInitialFunctionPattern(int priority, String regex);
 
-    //void addFunctionEquivalent(String regex, CipherFunction function);
+     addFunctionEquivalent(String regex, CipherFunction function);
 }
 
 abstract class CipherFunction {
 
-     apply(List array, String argument);
+     apply(Runes array, String argument);
 }

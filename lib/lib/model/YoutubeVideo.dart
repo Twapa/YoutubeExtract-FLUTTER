@@ -117,47 +117,47 @@ class YoutubeVideo {
 
   download(Format format) async {
     var url = format.url;
-    
+    // print(url);
 
-    // String title = details().title;
-    // var fileName = '${title}.${format.extensions.value()}'
-    //     .replaceAll(r'\', '')
-    //     .replaceAll('/', '')
-    //     .replaceAll('*', '')
-    //     .replaceAll('?', '')
-    //     .replaceAll('"', '')
-    //     .replaceAll('<', '')
-    //     .replaceAll('>', '')
-    //     .replaceAll('|', '');
-    // ;
+    //String title = details().title;
+    var fileName = '${details().title}.${format.extensions.value()}';
+    // .replaceAll(r'\', '')
+    // .replaceAll('/', '')
+    // .replaceAll('*', '')
+    // .replaceAll('?', '')
+    // .replaceAll('"', '')
+    // .replaceAll('<', '')
+    // .replaceAll('>', '')
+    // .replaceAll('|', '');
 
-    // File file =
-    //     File('G:\\flutter projects\\YoutubeExtract\\downloaded\\$fileName');
-    // Uri uri = Uri.parse(url);
+    File file =
+        File('G:\\flutter projects\\YoutubeExtract\\downloaded\\$fileName');
+    Uri uri = Uri.parse(url);
     // // Create the StreamedRequest to track the download status.
-    // var req = http.Request('get', uri);
-    // var resp = await req.send() ?? null;
+    var req = http.Request('get', uri);
+    var resp = await req.send() ?? null;
+    print(resp);
 
     // // Open the file in appendMode.
-    // var output = file.openWrite(mode: FileMode.writeOnlyAppend);
+    var output = file.openWrite(mode: FileMode.writeOnlyAppend);
 
-    // var len = resp.contentLength;
-    // var count = 0;
-    // var oldProgress = -1;
+    var len = resp.contentLength;
+    var count = 0;
+    var oldProgress = -1;
 
-    // resp.stream.listen((data) {
-    //   count += data.length;
-    //   var progress = ((count / len) * 100).round();
-    //   if (progress != oldProgress) {
-    //     print('$progress%');
+    resp.stream.listen((data) {
+      count += data.length;
+      var progress = ((count / len) * 100).round();
+      if (progress != oldProgress) {
+        print('$progress%');
 
-    //     oldProgress = progress;
-    //   }
+        oldProgress = progress;
+      }
 
-    //   output.add(data);
-    // }, onDone: () async {
-    //   await output.close();
-    // }).asFuture();
+      output.add(data);
+    }, onDone: () async {
+      await output.close();
+    }).asFuture();
   }
   //     videoDetails.checkDownload();
 

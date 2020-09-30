@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:YoutubeExtract/getplayer.dart';
 import 'package:YoutubeExtract/lib/YoutubrDownloader.dart';
 import 'package:YoutubeExtract/lib/model/YouDetails.dart';
 import 'package:YoutubeExtract/lib/model/YoutubeVideo.dart';
@@ -17,16 +16,19 @@ import 'package:html/parser.dart' as html;
 main() async {
   //await playe.getVideoPlayerContextAsync('48kmkN-v6-4');
 
-  String DESPACITO_ID = "kJQP7kiw5Fk"; // despacito
-   String mtz = "weQB4BL9zBM"; // despacito
-
+  String DESPACITO_ID = "VJfFS_6Y_i4"; // despacito
+  String mtz = "R5WlB2i60y8"; // despacito
+  // https://www.youtube.com/watch?v=it32Q16TVeE
+  //https://www.youtube.com/watch?v=VJfFS_6Y_i4
+  //https://www.youtube.com/watch?v=hYq8sGZJyOA
+  //https://www.youtube.com/watch?v=R5WlB2i60y8
 
   YoutubeDownloader downloader = new YoutubeDownloader();
 
   YoutubeVideo v = await downloader.getVideo(mtz);
-   //await downloader.getVideo(DESPACITO_ID);
-   
-   print(v.details().author);
+  //await downloader.getVideo(DESPACITO_ID);
+
+ //  print(v.details());
 
   // video details
   //VideoDetails details = v.details();
@@ -43,10 +45,10 @@ main() async {
   //   print('${it.qualityLabel} ${it.bitrate}');
   // });
 
-   int itag = 18;
-   var format = v.findFormatByItag(itag);
-    v.download(format);
- // print(format.url);
+  int itag = 18;
+  var format = v.findFormatByItag(itag);
+  v.download(format);
+  // print(format.url);
   // Uri u = Uri.parse(format.url);
   //print(u);
 }

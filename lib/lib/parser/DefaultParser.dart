@@ -274,6 +274,14 @@ class DefaultParser implements Parser {
 
       http.Client httped = http.Client();
 
+      Cipher cipher = cipherFactory.createCipher(jsUrl) ?? null;
+      String signature = cipher.getSignature(s);
+      //print(signature);
+
+      String decipheredUrl = urlWithSig + "&sig=" + signature;
+               
+      json["url"] =decipheredUrl;
+
     //  String signature = await decipherUrl(jsUrl, s, httped);
 
    //  String decipheredUrl = urlWithSig + "&sig=" + signature;

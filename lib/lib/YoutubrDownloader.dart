@@ -35,25 +35,18 @@ class YoutubeDownloader {
   // }
 
   Future<YoutubeVideo> getVideo(String videoId) async {
-    
     String htmlUrl = "https://www.youtube.com/watch?v=" + videoId;
 
     var ytPlayerConfig = await parser.getPlayerConfig(htmlUrl);
 
     var ytPlayerConfigJson = json.decode(ytPlayerConfig);
 
-    
+    VideoDetails videoDetails = parser.getVideoDetails(ytPlayerConfigJson);
 
-     VideoDetails videoDetails = parser.getVideoDetails(ytPlayerConfigJson);
-
-    
     List<Format> formats = await parser.parseFormats(ytPlayerConfigJson);
 
-    
-    
-
     //List<SubtitlesInfo> subtitlesInfo = parser.getSubtitlesInfoFromCaptions(ytPlayerConfig);
-     return  YoutubeVideo(videoDetails,formats);
+    return YoutubeVideo(videoDetails, formats);
   }
 
   //  YoutubePlaylist getPlaylist(String playlistId) throws YoutubeException {
