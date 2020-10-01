@@ -17,7 +17,7 @@ main() async {
   //await playe.getVideoPlayerContextAsync('48kmkN-v6-4');
 
   String DESPACITO_ID = "VJfFS_6Y_i4"; // despacito
-  String mtz = "R5WlB2i60y8"; // despacito
+  String mtz = "it32Q16TVeE"; // despacito
   // https://www.youtube.com/watch?v=it32Q16TVeE
   //https://www.youtube.com/watch?v=VJfFS_6Y_i4
   //https://www.youtube.com/watch?v=hYq8sGZJyOA
@@ -28,27 +28,20 @@ main() async {
   YoutubeVideo v = await downloader.getVideo(mtz);
   //await downloader.getVideo(DESPACITO_ID);
 
- //  print(v.details());
+  // print(v.details().author);
 
   // video details
   //VideoDetails details = v.details();
   //print(details.averageRating());
 
-  // List<AudioVideoFormat> videoWithAudioFormats =
-  //     await v.videoWithAudioFormats();
-  // videoWithAudioFormats.forEach((it) {
-  //   print('${it.audioQuality()}   : ${it.url}');
-  // });
+  
 
-  // List<VideoFormat> videoFormats = v.findVideoWithQuality(VideoQuality.hd720);
-  // videoFormats.forEach((it) {
-  //   print('${it.qualityLabel} ${it.bitrate}');
-  // });
+  
 
   int itag = 18;
   var format = v.findFormatByItag(itag);
   v.download(format);
-  // print(format.url);
+  // print(format.typeoff());
   // Uri u = Uri.parse(format.url);
   //print(u);
 }

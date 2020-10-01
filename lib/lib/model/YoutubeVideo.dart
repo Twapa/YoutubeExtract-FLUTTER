@@ -121,17 +121,9 @@ class YoutubeVideo {
 
     //String title = details().title;
     var fileName = '${details().title}.${format.extensions.value()}';
-    // .replaceAll(r'\', '')
-    // .replaceAll('/', '')
-    // .replaceAll('*', '')
-    // .replaceAll('?', '')
-    // .replaceAll('"', '')
-    // .replaceAll('<', '')
-    // .replaceAll('>', '')
-    // .replaceAll('|', '');
-
+    
     File file =
-        File('G:\\flutter projects\\YoutubeExtract\\downloaded\\$fileName');
+        File('G:\\flutter projects\\downloaded\\$fileName');
     Uri uri = Uri.parse(url);
     // // Create the StreamedRequest to track the download status.
     var req = http.Request('get', uri);

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:YoutubeExtract/lib/cipher/CachedCipherFactory.dart';
 import 'package:YoutubeExtract/lib/cipher/CipherInterface.dart';
+import 'package:YoutubeExtract/lib/cipher/decipher.dart';
 
 import 'package:YoutubeExtract/lib/extractor/DefaultExtractor.dart';
 import 'package:YoutubeExtract/lib/extractor/Extractor.dart';
@@ -265,7 +266,6 @@ class DefaultParser implements Parser {
       String urlWithSig = jsonCipher["url"] ?? null;
 
       String urlsig = utf8.decode(urlWithSig.runes.toList());
-      
 
       String s = jsonCipher["s"] ?? null;
       s = utf8.decode(s.runes.toList());
@@ -274,26 +274,22 @@ class DefaultParser implements Parser {
 
       http.Client httped = http.Client();
 
-      Cipher cipher = cipherFactory.createCipher(jsUrl) ?? null;
-      String signature = cipher.getSignature(s);
-      //print(signature);
+      // Cipher cipher = cipherFactory.createCipher(jsUrl) ?? null;
+      // String signature = cipher.getSignature(s);
+      // //print(signature);
 
-      String decipheredUrl = urlWithSig + "&sig=" + signature;
-               
-      json["url"] =decipheredUrl;
+      // String decipheredUrl = urlWithSig + "&sig=" + signature;
 
-    //  String signature = await decipherUrl(jsUrl, s, httped);
+      // json["url"] =decipheredUrl;
 
-   //  String decipheredUrl = urlWithSig + "&sig=" + signature;
+      var url = await decipherUrl(jsUrl, signatureCipher, httped);
 
-   //  json['url'] = decipheredUrl;
+      // String decipheredUrl = urlWithSig + "&sig=" + signature;
 
+      json['url'] = url.toString();
       
     }
 
-   
-
-    
     // Itag itag;
 
     int tag = json["itag"];
@@ -303,7 +299,6 @@ class DefaultParser implements Parser {
 
     bool hasAudio = ig.isAudio();
 
-    
     //var af = AudioFormat(json);
     //print(af);
     // return null;
