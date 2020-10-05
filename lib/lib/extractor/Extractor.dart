@@ -1,12 +1,12 @@
 abstract class Extractor {
 
-  //  void setRequestProperty(String key, String value);
+   setRequestProperty(String key, String value);
 
-  //  void setRetryOnFailure(int retryOnFailure);
+   setRetryOnFailure(int retryOnFailure);
 
     extractYtPlayerConfig(String html);
 
- //   String extractYtInitialData(String html) throws YoutubeException;
+   String extractYtInitialData(String html);
 
    Future<String> loadUrl(String url);
 

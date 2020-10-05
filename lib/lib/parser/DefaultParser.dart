@@ -13,6 +13,8 @@ import 'package:YoutubeExtract/lib/model/formats/AudioVideoFormat.dart';
 import 'package:YoutubeExtract/lib/model/formats/Format.dart';
 import 'package:YoutubeExtract/lib/model/formats/VideoFormat.dart';
 import 'package:YoutubeExtract/lib/model/itag.dart';
+import 'package:YoutubeExtract/lib/model/playlist/PlaylistDetails.dart';
+import 'package:YoutubeExtract/lib/model/playlist/PlaylistVideoDetails.dart';
 import 'package:YoutubeExtract/lib/model/quality/enums.dart';
 import 'package:YoutubeExtract/lib/model/type.dart';
 import 'package:YoutubeExtract/lib/parser/Parser.dart';
@@ -20,10 +22,10 @@ import 'package:http/http.dart' as http;
 
 class DefaultParser implements Parser {
   // private static final Pattern subtitleLangCodeRegex = Pattern.compile("lang_code=\"(.{2,3})\"");
-  // private static final Pattern textNumberRegex = Pattern.compile("[0-9, ']+");
+  RegExp textNumberRegex = RegExp("[0-9, ']+");
 
   Extractor extractor;
-  CipherFactory cipherFactory;
+  // CipherFactory cipherFactory;
 
   DefaultParser() {
     extractor = DefaultExtractor();
@@ -31,10 +33,10 @@ class DefaultParser implements Parser {
     //  this.cipherFactory = new CachedCipherFactory(extractor);
   }
 
-  // @Override
-  // public Extractor getExtractor() {
-  //     return extractor;
-  // }
+  @override
+  Extractor getExtractor() {
+    return extractor;
+  }
 
   // @Override
   // public CipherFactory getCipherFactory() {
@@ -161,92 +163,10 @@ class DefaultParser implements Parser {
       var parseformat = await parseFormat(json, config);
 
       format.add(parseformat);
-      //  format = await parseFormat(json, config);
     }
 
-    // print(format);
-
-    // for (int i = 0; i < jsonFormats.size(); i++) {
-    //     JSONObject json = jsonFormats.getJSONObject(i);
-    //     if ("FORMAT_STREAM_TYPE_OTF".equals(json.getString("type")))
-    //         continue; // unsupported otf formats which cause 404 not found
-    //     try {
-    //         Format format = parseFormat(json, config);
-    //         formats.add(format);
-    //     } catch (YoutubeException.CipherException e) {
-    //         throw e;
-    //     } catch (YoutubeException e) {
-    //         System.err.println("Error parsing format: " + json);
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    // }
     return format;
   }
-
-  // @Override
-  // public JSONObject getInitialData(String htmlUrl) throws YoutubeException {
-  //     String html = extractor.loadUrl(htmlUrl);
-
-  //     String ytInitialData = extractor.extractYtInitialData(html);
-  //     try {
-  //         return JSON.parseObject(ytInitialData);
-  //     } catch (Exception e) {
-  //         throw new YoutubeException.BadPageException("Could not parse initial data json");
-  //     }
-  // }
-
-  // @Override
-  // public PlaylistDetails getPlaylistDetails(String playlistId, JSONObject initialData) {
-  //     String title = initialData.getJSONObject("metadata")
-  //             .getJSONObject("playlistMetadataRenderer")
-  //             .getString("title");
-  //     JSONArray sideBarItems = initialData.getJSONObject("sidebar").getJSONObject("playlistSidebarRenderer").getJSONArray("items");
-  //     String author = sideBarItems.getJSONObject(1)
-  //             .getJSONObject("playlistSidebarSecondaryInfoRenderer")
-  //             .getJSONObject("videoOwner")
-  //             .getJSONObject("videoOwnerRenderer")
-  //             .getJSONObject("title")
-  //             .getJSONArray("runs")
-  //             .getJSONObject(0)
-  //             .getString("text");
-  //     JSONArray stats = sideBarItems.getJSONObject(0)
-  //             .getJSONObject("playlistSidebarPrimaryInfoRenderer")
-  //             .getJSONArray("stats");
-  //     int videoCount = extractNumber(stats.getJSONObject(0).getJSONArray("runs").getJSONObject(0).getString("text"));
-  //     int viewCount = extractNumber(stats.getJSONObject(1).getString("simpleText"));
-
-  //     return new PlaylistDetails(playlistId, title, author, videoCount, viewCount);
-  // }
-
-  // @Override
-  // public List<PlaylistVideoDetails> getPlaylistVideos(JSONObject initialData, int videoCount) throws YoutubeException {
-  //     JSONObject content;
-
-  //     try {
-  //         content = initialData.getJSONObject("contents")
-  //                 .getJSONObject("twoColumnBrowseResultsRenderer")
-  //                 .getJSONArray("tabs").getJSONObject(0)
-  //                 .getJSONObject("tabRenderer")
-  //                 .getJSONObject("content")
-  //                 .getJSONObject("sectionListRenderer")
-  //                 .getJSONArray("contents").getJSONObject(0)
-  //                 .getJSONObject("itemSectionRenderer")
-  //                 .getJSONArray("contents").getJSONObject(0)
-  //                 .getJSONObject("playlistVideoListRenderer");
-  //     } catch (NullPointerException e) {
-  //         throw new YoutubeException.BadPageException("Playlist initial data not found");
-  //     }
-
-  //     List<PlaylistVideoDetails> videos;
-  //     if (videoCount > 0) {
-  //         videos = new ArrayList<>(videoCount);
-  //     } else {
-  //         videos = new LinkedList<>();
-  //     }
-  //     populatePlaylist(content, videos, getClientVersion(initialData));
-  //     return videos;
-  // }
 
   Future<Format> parseFormat(var json, var config) async {
     if (json.containsKey("signatureCipher")) {
@@ -287,7 +207,6 @@ class DefaultParser implements Parser {
       // String decipheredUrl = urlWithSig + "&sig=" + signature;
 
       json['url'] = url.toString();
-      
     }
 
     // Itag itag;
@@ -313,66 +232,122 @@ class DefaultParser implements Parser {
     //throw ArgumentError('  unknown itag');
   }
 
-  // private void populatePlaylist(JSONObject content, List<PlaylistVideoDetails> videos, String clientVersion) throws YoutubeException {
-  //     JSONArray contents = content.getJSONArray("contents");
-  //     for (int i = 0; i < contents.size(); i++) {
-  //         videos.add(new PlaylistVideoDetails(contents.getJSONObject(i).getJSONObject("playlistVideoRenderer")));
-  //     }
-  //     if (content.containsKey("continuations")) {
-  //     	String continuation = content.getJSONArray("continuations")
-  //                 .getJSONObject(0)
-  //                 .getJSONObject("nextContinuationData")
-  //                 .getString("continuation");
-  //         loadPlaylistContinuation(continuation, videos, clientVersion);
-  //     }
-  // }
+//playlist
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  ///
+  ///
+  ///
 
-  // private void loadPlaylistContinuation(String continuation, List<PlaylistVideoDetails> videos, String clientVersion) throws YoutubeException {
-  //     JSONObject content;
+  @override
+  getInitialData(String htmlUrl) async {
+    String html = await extractor.loadUrl(htmlUrl);
 
-  //     String url = "https://www.youtube.com/browse_ajax?ctoken=" + continuation
-  //             + "&continuation=" + continuation;
+    String ytInitialData = extractor.extractYtInitialData(html);
+    // print(json.decode(json.decode(ytInitialData)));
 
-  //     getExtractor().setRequestProperty("X-YouTube-Client-Name", "1");
-  //     getExtractor().setRequestProperty("X-YouTube-Client-Version", clientVersion);
-  //     String html = getExtractor().loadUrl(url);
+    return json.decode(ytInitialData);
+  }
 
-  //     try {
-  //         JSONArray response = JSON.parseArray(html);
-  //         content = response.getJSONObject(1)
-  //                 .getJSONObject("response")
-  //                 .getJSONObject("continuationContents")
-  //                 .getJSONObject("playlistVideoListContinuation");
-  //         populatePlaylist(content, videos, clientVersion);
-  //     } catch (YoutubeException e) {
-  //         throw e;
-  //     } catch (Exception e) {
-  //         throw new YoutubeException.BadPageException("Could not parse playlist continuation json");
-  //     }
-  // }
+  @override
+  getPlaylistDetails(String playlistId, var initialData) {
+    String title = initialData["metadata"]["playlistMetadataRenderer"]["title"];
 
-  // private String getClientVersion(JSONObject json) {
-  //     JSONArray trackingParams = json.getJSONObject("responseContext")
-  //             .getJSONArray("serviceTrackingParams");
-  //     if (trackingParams == null) {
-  //         return "2.20200720.00.02";
-  //     }
-  //     for (int ti = 0; ti < trackingParams.size(); ti++) {
-  //         JSONArray params = trackingParams.getJSONObject(ti).getJSONArray("params");
-  //         for (int pi = 0; pi < params.size(); pi ++) {
-  //             if (params.getJSONObject(pi).getString("key").equals("cver")) {
-  //                 return params.getJSONObject(pi).getString("value");
-  //             }
-  //         }
-  //     }
-  //     return null;
-  // }
+    var sideBarItems =
+        initialData["sidebar"]["playlistSidebarRenderer"]["items"];
 
-  // private static int extractNumber(String text) {
-  //     Matcher matcher = textNumberRegex.matcher(text);
-  //     if (matcher.find()) {
-  //         return Integer.parseInt(matcher.group(0).replaceAll("[, ']", ""));
-  //     }
-  //     return 0;
-  // }
+    String author = sideBarItems[1]["playlistSidebarSecondaryInfoRenderer"]
+        ["videoOwner"]["videoOwnerRenderer"]["title"]["runs"][0]["text"];
+
+    var stats = sideBarItems[0]["playlistSidebarPrimaryInfoRenderer"]["stats"];
+
+    var videoCount = extractNumber(stats[0]["runs"][0]["text"]);
+
+    //var viewCount = extractNumber(stats[1]["simpleText"]);
+
+    return new PlaylistDetails(playlistId, title, author, videoCount);
+  }
+
+  @override
+  getPlaylistVideos(var initialData, var videoCount) {
+    int videoc = int.parse(videoCount);
+    var content = initialData["contents"]["twoColumnBrowseResultsRenderer"]
+                ["tabs"][0]["tabRenderer"]["content"]["sectionListRenderer"]
+            ["contents"][0]["itemSectionRenderer"]["contents"][0]
+        ["playlistVideoListRenderer"];
+
+    List<PlaylistVideoDetails> videos =[];
+    //if (videoc > 0) {
+    //  videos = List(videoc);
+    // } else {
+    //  videos = [];
+    // }
+
+    populatePlaylist(content, videos, getClientVersion(initialData));
+    
+     return videos;
+  }
+
+  populatePlaylist(
+      var content, List<PlaylistVideoDetails> videos, String clientVersion) {
+    List contents = content["contents"];
+
+    for (int i = 0; i < contents.length; i++) {
+      videos.add(PlaylistVideoDetails(contents[i]["playlistVideoRenderer"]));
+    }
+
+    // if (content.containsKey("continuations")) {
+    //   String continuation =
+    //       content["continuations"][0]["nextContinuationData"]["continuation"];
+    //   //loadPlaylistContinuation(continuation, videos, clientVersion);
+    // }
+  }
+
+  loadPlaylistContinuation(String continuation,
+      List<PlaylistVideoDetails> videos, String clientVersion) async {
+    var content;
+
+    String url = "https://www.youtube.com/browse_ajax?ctoken=" +
+        continuation +
+        "&continuation=" +
+        continuation;
+
+    getExtractor().setRequestProperty("X-YouTube-Client-Name", "1");
+    getExtractor()
+        .setRequestProperty("X-YouTube-Client-Version", clientVersion);
+    String html = await getExtractor().loadUrl(url);
+
+    try {
+      var response = json.decode(html);
+      content = response[1]["response"]["continuationContents"]
+          ["playlistVideoListContinuation"];
+      populatePlaylist(content, videos, clientVersion);
+    } catch (e) {
+      throw e;
+    } catch (e) {
+      throw ("Could not parse playlist continuation json");
+    }
+  }
+
+  String getClientVersion(var json) {
+    var trackingParams = json["responseContext"]["serviceTrackingParams"];
+    if (trackingParams == null) {
+      return "2.20200720.00.02";
+    }
+    for (int ti = 0; ti < trackingParams.length; ti++) {
+      var params = trackingParams[ti]["params"];
+      for (int pi = 0; pi < params.length; pi++) {
+        if (params[pi]["key"] == "cver") {
+          return params[pi]["value"];
+        }
+      }
+    }
+    return null;
+  }
+
+  extractNumber(String text) {
+    var matcher =
+        textNumberRegex.firstMatch(text).group(0).replaceAll("[, ']", "");
+
+    return matcher;
+  }
 }

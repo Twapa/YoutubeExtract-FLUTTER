@@ -1,7 +1,7 @@
  abstract class AbstractVideoDetails {
 
    String _videoId;
-//int _lengthSeconds;
+   var _lengthSeconds;
    List<String> _thumbnails;
 
     // Subclass specific extraction
@@ -15,7 +15,7 @@
 
   AbstractVideoDetails(var details) {
         _videoId = details["videoId"];
-       // _lengthSeconds = details["lengthSeconds"];
+        _lengthSeconds = details["lengthSeconds"];
 
 
         // var jsonThumbnails = json.getJSONObject("thumbnail").getJSONArray("thumbnails");
@@ -30,24 +30,28 @@
 
     void checkDownload();
 
-  String get videoId=>  _videoId;
+  String videoId(){
+    return _videoId;
+  }
 
   String  titlef(){
     return title;
   }
 
-  //int get lengthSeconds=> _lengthSeconds;
+   lengthSecondsf(){
+    return _lengthSeconds;
+  }
     
 
   List<String> get thumbnails=>  _thumbnails;
      
 
-  String get authorf{
+  String  authorf(){
     return author;
   }
     
 
-  bool get isLivef {
+  bool  isLivef() {
     return isLive;
   }
     

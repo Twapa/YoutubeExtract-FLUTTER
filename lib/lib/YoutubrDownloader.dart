@@ -4,6 +4,9 @@ import 'package:YoutubeExtract/lib/extractor/Extractor.dart';
 import 'package:YoutubeExtract/lib/model/YouDetails.dart';
 import 'package:YoutubeExtract/lib/model/YoutubeVideo.dart';
 import 'package:YoutubeExtract/lib/model/formats/Format.dart';
+import 'package:YoutubeExtract/lib/model/playlist/PlaylistDetails.dart';
+import 'package:YoutubeExtract/lib/model/playlist/PlaylistVideoDetails.dart';
+import 'package:YoutubeExtract/lib/model/playlist/YoutubePlaylist.dart';
 import 'package:YoutubeExtract/lib/parser/DefaultParser.dart';
 import 'package:YoutubeExtract/lib/parser/Parser.dart';
 
@@ -64,4 +67,20 @@ class YoutubeDownloader {
 //  List<SubtitlesInfo> getVideoSubtitles(String videoId) throws YoutubeException {
 //         return parser.getSubtitlesInfo(videoId);
 //     }
+
+  getPlaylist(String playlistId) async {
+    String htmlUrl = "https://www.youtube.com/playlist?list=" + playlistId;
+
+    var ytInitialData = await parser.getInitialData(htmlUrl);
+
+    PlaylistDetails playlistDetails =
+        parser.getPlaylistDetails(playlistId, ytInitialData);
+
+    List<PlaylistVideoDetails> videos =
+        parser.getPlaylistVideos(ytInitialData, playlistDetails.videoCountf());
+
+    
+
+     return YoutubePlaylist(playlistDetails, videos);
+  }
 }

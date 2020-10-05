@@ -3,9 +3,9 @@ import 'package:YoutubeExtract/lib/model/formats/Format.dart';
 
 abstract class Parser {
 
-    // Extractor getExtractor();
+     getExtractor();
 
-    // CipherFactory getCipherFactory();
+    // getCipherFactory();
 
     // /* Video */
 
@@ -23,9 +23,9 @@ abstract class Parser {
 
     /* Playlist */
 
-    // JSONObject getInitialData(String htmlUrl) throws YoutubeException;
+     getInitialData(String htmlUrl);
 
-    // PlaylistDetails getPlaylistDetails(String playlistId, JSONObject initialData);
+     getPlaylistDetails(String playlistId, var initialData);
 
-    // List<PlaylistVideoDetails> getPlaylistVideos(JSONObject initialData, int videoCount)  throws YoutubeException;
+     getPlaylistVideos(var initialData, var videoCount);
 }

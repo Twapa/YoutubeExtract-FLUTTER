@@ -18,31 +18,31 @@ class DefaultExtractor extends Extractor {
 
 
      
-  // private static final Pattern YT_INITIAL_DATA = Pattern.compile("window\\[\"ytInitialData\"\\] = (\\{.*?\\});");
+     RegExp YT_INITIAL_DATA = RegExp("window\\[\"ytInitialData\"\\] = (\\{.*?\\});");
 
-  // private static final String DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36";
-  // private static final String DEFAULT_ACCEPT_LANG = "en-US,en;";
-  // private static final int DEFAULT_RETRY_ON_FAILURE = 3;
+   final String DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36";
+  final String DEFAULT_ACCEPT_LANG = "en-US,en;";
+  
 
-  // private Map<String, String> requestProperties = new HashMap<String, String>();
-  // private int retryOnFailure = DEFAULT_RETRY_ON_FAILURE;
+    Map<String, String> requestProperties = {};
+    int retryOnFailure = 3;
 
   DefaultExtractor() {
-    // setRequestProperty("User-Agent", DEFAULT_USER_AGENT);
-    // setRequestProperty("Accept-language", DEFAULT_ACCEPT_LANG);
+     setRequestProperty("User-Agent", DEFAULT_USER_AGENT);
+     setRequestProperty("Accept-language", DEFAULT_ACCEPT_LANG);
   }
 
-  // @Override
-  // public void setRequestProperty(String key, String value) {
-  //     requestProperties.put(key, value);
-  // }
+  @override
+ setRequestProperty(String key, String value) {
+      requestProperties[key] = value;
+  }
 
-  // @Override
-  // public void setRetryOnFailure(int retryOnFailure) {
-  //     if (retryOnFailure < 0)
-  //         throw new IllegalArgumentException("retry count should be > 0");
-  //     this.retryOnFailure = retryOnFailure;
-  // }
+  @override
+   setRetryOnFailure(int retryOnFailure) {
+      if (retryOnFailure < 0)
+          throw ("retry count should be > 0");
+      this.retryOnFailure = retryOnFailure;
+  }
 
   @override
   extractYtPlayerConfig(String html) {
@@ -61,16 +61,18 @@ class DefaultExtractor extends Extractor {
     // return json.decode(matcher);
   }
 
-  // @Override
-  // public String extractYtInitialData(String html) throws YoutubeException {
-  //     Matcher matcher = YT_INITIAL_DATA.matcher(html);
+  @override
+   String extractYtInitialData(String html){
 
-  //     if (matcher.find()) {
-  //         return matcher.group(1);
-  //     }
 
-  //     throw new YoutubeException.BadPageException("Could not parse web page");
-  // }
+      var matcher = YT_INITIAL_DATA.firstMatch(html).group(1);
+
+      
+          return matcher;
+      
+
+      
+  }
 
   @override
   Future<String> loadUrl(String url) async {
