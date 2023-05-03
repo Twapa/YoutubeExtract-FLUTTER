@@ -1,5 +1,5 @@
 # YoutubeExtract
-Are you looking for a powerful and versatile solution to integrate YouTube functionality into your Flutter app? Look no further than our YouTube API programmed in Flutter!
+Are you looking for a powerful and versatile solution to integrate YouTube🔎 functionality into your Flutter app? Look no further than our YouTube API programmed in Flutter! 🤞
 
  API is designed to make it easy for developers to add robust YouTube capabilities to their applications, allowing users to browse videos, search for content, and interact with the world's most popular video-sharing platform.
 
